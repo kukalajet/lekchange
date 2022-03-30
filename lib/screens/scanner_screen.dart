@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lekchange/blocs/scan/scan.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 
 class ScannerScreen extends StatelessWidget {
@@ -12,6 +14,9 @@ class ScannerScreen extends StatelessWidget {
         onDetect: (barcode, arguments) {
           final code = barcode.rawValue;
           debugPrint('Barcode found: $code');
+          if (code != null) {
+            BlocProvider.of<ScanBloc>(context).add(ValueScanned(code));
+          }
         },
       ),
     );
