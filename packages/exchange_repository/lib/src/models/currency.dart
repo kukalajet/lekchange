@@ -1,5 +1,3 @@
-import 'package:meta/meta.dart';
-
 class Currency {
   final String name;
   final String code;
@@ -7,10 +5,10 @@ class Currency {
   final double rate;
 
   const Currency({
-    @required this.name,
-    @required this.code,
-    @required this.symbol,
-    @required this.rate,
+    required this.name,
+    required this.code,
+    required this.symbol,
+    required this.rate,
   });
 
   @override
