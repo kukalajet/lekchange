@@ -18,13 +18,7 @@ class ScannerScreen extends StatelessWidget {
           showCupertinoModalBottomSheet(
             context: context,
             expand: false,
-            builder: (context) => ValueWIP(
-              key: key,
-              value: value,
-              onDismiss: () {
-                context.read<ScanBloc>().add(const ValueScanned(""));
-              },
-            ),
+            builder: (context) => ModalContent(key: key),
           );
         }
       },
