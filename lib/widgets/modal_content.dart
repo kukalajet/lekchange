@@ -12,19 +12,21 @@ class ModalContent extends StatelessWidget {
       builder: (context, state) {
         final value = state.value;
 
-        return Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const SizedBox(height: 8.0),
-            Header(
-              onDismiss: () {
-                Navigator.of(context).pop();
-                context.read<ScanBloc>().add(const ScanValueDismissed());
-              },
-            ),
-            Body(value: value),
-            const SizedBox(height: 24.0),
-          ],
+        return Material(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const SizedBox(height: 8.0),
+              Header(
+                onDismiss: () {
+                  Navigator.of(context).pop();
+                  context.read<ScanBloc>().add(const ScanValueDismissed());
+                },
+              ),
+              Body(value: value),
+              const SizedBox(height: 24.0),
+            ],
+          ),
         );
       },
     );
@@ -67,12 +69,17 @@ class Body extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
+    return Container(
+      padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 48.0),
       width: double.infinity,
       child: Text(
         value,
         maxLines: 3,
         textAlign: TextAlign.center,
+        style: const TextStyle(
+          fontWeight: FontWeight.w700,
+          fontSize: 48,
+        ),
       ),
     );
   }

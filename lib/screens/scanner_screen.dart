@@ -17,8 +17,10 @@ class ScannerScreen extends StatelessWidget {
         final value = state.value;
         if (value.isNotEmpty) {
           showCupertinoModalBottomSheet(
-            context: context,
             expand: false,
+            context: context,
+            isDismissible: false,
+            enableDrag: false,
             builder: (context) => ModalContent(key: key),
           );
         }
