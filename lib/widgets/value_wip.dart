@@ -1,19 +1,32 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:lekchange/blocs/scan/scan.dart';
 
 class ValueWIP extends StatelessWidget {
-  const ValueWIP({Key? key}) : super(key: key);
+  const ValueWIP({
+    Key? key,
+    required this.value,
+    required this.onDismiss,
+  }) : super(key: key);
+
+  final String value;
+  final Function onDismiss;
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ScanBloc, ScanState>(
-      buildWhen: ((previous, current) => previous.value != current.value),
-      builder: (context, state) {
-        final value = state.value;
-
-        return Text(value);
-      },
+    return Column(
+      children: [
+        GestureDetector(
+          onTap: () {
+            Navigator.of(context).pop();
+            onDismiss();
+          },
+          child: const Icon(
+            Icons.close,
+            size: 24,
+            color: Colors.black54,
+          ),
+        ),
+        Text(value),
+      ],
     );
   }
 }

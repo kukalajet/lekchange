@@ -21,17 +21,21 @@ class App extends StatelessWidget {
       )
     ];
 
-    return MaterialApp(
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: MultiRepositoryProvider(
-        providers: repositoryProviders,
-        child: MultiBlocProvider(
-          providers: blocProviders,
-          child: ScannerScreen(key: key),
-        ),
+    return MultiRepositoryProvider(
+      providers: repositoryProviders,
+      child: MultiBlocProvider(
+        providers: blocProviders,
+        child: AppView(key: key),
       ),
     );
+  }
+}
+
+class AppView extends StatelessWidget {
+  const AppView({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(home: ScannerScreen(key: key));
   }
 }
