@@ -11,7 +11,8 @@ class ScannerScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<ScanBloc, ScanState>(
-      listenWhen: (previous, current) => previous.value != current.value,
+      listenWhen: (previous, current) =>
+          previous.status != current.status && previous.value != current.value,
       listener: (context, state) {
         final value = state.value;
         if (value.isNotEmpty) {
@@ -22,9 +23,10 @@ class ScannerScreen extends StatelessWidget {
           );
         }
       },
-      buildWhen: (previous, current) => previous.value != current.value,
+      buildWhen: (previous, current) =>
+          previous.status != current.status && previous.value != current.value,
       builder: (context, state) {
-        final allowDuplicates = state.value.isEmpty;
+        final allowDuplicates = state.status == ScanStatus.initial;
 
         return Scaffold(
           body: MobileScanner(

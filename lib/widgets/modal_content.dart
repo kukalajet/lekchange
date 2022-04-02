@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:lekchange/blocs/scan/scan.dart';
+import 'package:lekchange/blocs/blocs.dart';
 
 class ModalContent extends StatelessWidget {
   const ModalContent({Key? key}) : super(key: key);
