@@ -20,7 +20,8 @@ class App extends StatelessWidget {
         create: (_) => ScanBloc(),
       ),
       BlocProvider<ExchangeBloc>(
-        create: (_) => ExchangeBloc(exchangeRepository: exchangeRepository),
+        create: (_) => ExchangeBloc(exchangeRepository: exchangeRepository)
+          ..add(ExchangeFetched()),
       )
     ];
 
