@@ -6,12 +6,10 @@ part 'scan_state.dart';
 part 'scan_event.dart';
 
 class ScanBloc extends Bloc<ScanEvent, ScanState> {
-  final ExchangeRepository exchangeRepository;
-
   final pricePrefix = 'prc=';
   final priceRegExp = RegExp(r'prc=[0-9.]+');
 
-  ScanBloc({required this.exchangeRepository}) : super(const ScanState()) {
+  ScanBloc() : super(const ScanState()) {
     on<ScanValueChanged>(_onScanValueChanged);
     on<ScanValueDismissed>(_onScanValueDismissed);
   }
