@@ -15,13 +15,16 @@ class App extends StatelessWidget {
       RepositoryProvider<ExchangeRepository>(create: (_) => exchangeRepository)
     ];
 
+    final scanBloc = ScanBloc();
     final blocProviders = <BlocProvider>[
       BlocProvider<ScanBloc>(
-        create: (_) => ScanBloc(),
+        create: (_) => scanBloc,
       ),
       BlocProvider<ExchangeBloc>(
-        create: (_) => ExchangeBloc(exchangeRepository: exchangeRepository)
-          ..add(ExchangeFetched()),
+        create: (_) => ExchangeBloc(
+          exchangeRepository: exchangeRepository,
+          scanBloc: scanBloc,
+        )..add(ExchangeFetched()),
       )
     ];
 

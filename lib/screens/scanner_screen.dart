@@ -15,7 +15,7 @@ class ScannerScreen extends StatelessWidget {
           previous.status != current.status && previous.value != current.value,
       listener: (context, state) {
         final value = state.value;
-        if (value.isNotEmpty) {
+        if (value != double.nan) {
           showCupertinoModalBottomSheet(
             expand: false,
             context: context,

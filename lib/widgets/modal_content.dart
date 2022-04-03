@@ -9,10 +9,10 @@ class ModalContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ScanBloc, ScanState>(
-      buildWhen: (previous, current) => previous.value != current.value,
+    return BlocBuilder<ExchangeBloc, ExchangeState>(
+      buildWhen: (previous, current) => previous.converted != current.converted,
       builder: (context, state) {
-        final value = state.value;
+        final value = state.converted;
 
         return Material(
           child: Column(

@@ -18,20 +18,21 @@ class ScanBloc extends Bloc<ScanEvent, ScanState> {
     final scanned = event.value;
     final isValid = priceRegExp.hasMatch(scanned);
     if (!isValid) {
-      emit(state.copyWith(status: ScanStatus.notValid, value: scanned));
+      emit(state.copyWith(status: ScanStatus.notValid));
       return;
     }
 
     final index = scanned.indexOf(pricePrefix);
     final value = scanned.substring(index + 4);
+    final parsed = double.parse(value);
 
-    emit(state.copyWith(status: ScanStatus.valid, value: value));
+    emit(state.copyWith(status: ScanStatus.valid, value: parsed));
   }
 
   void _onScanValueDismissed(
     ScanValueDismissed event,
     Emitter<ScanState> emit,
   ) {
-    emit(state.copyWith(status: ScanStatus.initial, value: ''));
+    emit(state.copyWith(status: ScanStatus.initial, value: double.nan));
   }
 }

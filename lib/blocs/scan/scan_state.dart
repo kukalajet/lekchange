@@ -5,13 +5,13 @@ enum ScanStatus { initial, valid, notValid }
 class ScanState extends Equatable {
   const ScanState({
     this.status = ScanStatus.initial,
-    this.value = '',
+    this.value = double.nan,
   });
 
-  final String value;
+  final double value;
   final ScanStatus status;
 
-  ScanState copyWith({ScanStatus? status, String? value, Currency? currency}) {
+  ScanState copyWith({ScanStatus? status, double? value, Currency? currency}) {
     return ScanState(
       status: status ?? this.status,
       value: value ?? this.value,
