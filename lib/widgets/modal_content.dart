@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lekchange/blocs/blocs.dart';
+import 'package:lekchange/widgets/widgets.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class ModalContent extends StatelessWidget {
   const ModalContent({Key? key}) : super(key: key);
@@ -24,7 +26,8 @@ class ModalContent extends StatelessWidget {
                 },
               ),
               Body(value: value),
-              const SizedBox(height: 24.0),
+              const Footer(),
+              const SizedBox(height: 8.0),
             ],
           ),
         );
@@ -62,6 +65,39 @@ class Header extends StatelessWidget {
   }
 }
 
+class Footer extends StatelessWidget {
+  const Footer({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Container(),
+        ElevatedButton(
+          onPressed: () {
+            showCupertinoModalBottomSheet(
+              expand: false,
+              context: context,
+              builder: (context) => ModalCurrencySelection(key: key),
+            );
+          },
+          child: const Icon(
+            Icons.language,
+            color: Colors.black54,
+            size: 24,
+          ),
+          style: ElevatedButton.styleFrom(
+            primary: Colors.grey[300],
+            shape: const CircleBorder(),
+            padding: const EdgeInsets.all(8.0),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
 class Body extends StatelessWidget {
   const Body({Key? key, required this.value}) : super(key: key);
 
@@ -70,7 +106,7 @@ class Body extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 48.0),
+      padding: const EdgeInsets.symmetric(vertical: 48.0, horizontal: 16.0),
       width: double.infinity,
       child: Text(
         value,
