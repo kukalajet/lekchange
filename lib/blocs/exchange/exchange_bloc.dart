@@ -21,7 +21,7 @@ class ExchangeBloc extends Bloc<ExchangeEvent, ExchangeState> {
 
     _scanSubscription = _scanBloc.stream.listen((event) {
       final value = event.value;
-      if (value != double.nan) {
+      if (!value.isNaN) {
         add(ExchangeConvertedValueChanged(value));
       }
     });
