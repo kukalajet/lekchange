@@ -16,15 +16,17 @@ class App extends StatelessWidget {
     ];
 
     final scanBloc = ScanBloc();
+    final exchangeBloc = ExchangeBloc(
+      exchangeRepository: exchangeRepository,
+      scanBloc: scanBloc,
+    );
+
     final blocProviders = <BlocProvider>[
       BlocProvider<ScanBloc>(
         create: (_) => scanBloc,
       ),
       BlocProvider<ExchangeBloc>(
-        create: (_) => ExchangeBloc(
-          exchangeRepository: exchangeRepository,
-          scanBloc: scanBloc,
-        )..add(ExchangeFetched()),
+        create: (_) => exchangeBloc..add(ExchangeFetched()),
       )
     ];
 
@@ -32,7 +34,7 @@ class App extends StatelessWidget {
       providers: repositoryProviders,
       child: MultiBlocProvider(
         providers: blocProviders,
-        child: AppView(key: key),
+        child: const AppView(),
       ),
     );
   }

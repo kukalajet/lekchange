@@ -10,9 +10,13 @@ class ModalContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<ExchangeBloc, ExchangeState>(
-      buildWhen: (previous, current) => previous.converted != current.converted,
+      buildWhen: (previous, current) =>
+          previous.converted != current.converted ||
+          previous.status != current.status,
       builder: (context, state) {
         final value = state.converted;
+        final currency = state.selectedCurrency.symbol;
+        final currenciesLoaded = state.status == ExchangeStatus.success;
 
         return Material(
           child: Column(
@@ -25,7 +29,9 @@ class ModalContent extends StatelessWidget {
                   context.read<ScanBloc>().add(const ScanValueDismissed());
                 },
               ),
-              Body(value: value),
+              currenciesLoaded
+                  ? Body(value: value, currency: currency)
+                  : const CircularProgressIndicator(),
               const Footer(),
               const SizedBox(height: 8.0),
             ],
@@ -99,9 +105,11 @@ class Footer extends StatelessWidget {
 }
 
 class Body extends StatelessWidget {
-  const Body({Key? key, required this.value}) : super(key: key);
+  const Body({Key? key, required this.value, required this.currency})
+      : super(key: key);
 
   final String value;
+  final String currency;
 
   @override
   Widget build(BuildContext context) {
@@ -109,7 +117,7 @@ class Body extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 48.0, horizontal: 16.0),
       width: double.infinity,
       child: Text(
-        value,
+        "$value $currency",
         maxLines: 3,
         textAlign: TextAlign.center,
         style: const TextStyle(

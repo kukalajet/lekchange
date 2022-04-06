@@ -8,33 +8,43 @@ class ExchangeState extends Equatable {
     this.status = ExchangeStatus.initial,
     this.selectedCurrency = Currency.empty,
     this.currencies = const <Currency>[],
+    this.scanned = double.nan,
     this.converted = '',
   });
 
   final ExchangeStatus status;
   final Currency selectedCurrency;
   final List<Currency> currencies;
+  final double scanned;
   final String converted;
 
   ExchangeState copyWith({
     ExchangeStatus? status,
     Currency? selectedCurrency,
     List<Currency>? currencies,
+    double? scanned,
     String? converted,
   }) {
     return ExchangeState(
       status: status ?? this.status,
       selectedCurrency: selectedCurrency ?? this.selectedCurrency,
       currencies: currencies ?? this.currencies,
+      scanned: scanned ?? this.scanned,
       converted: converted ?? this.converted,
     );
   }
 
   @override
   String toString() {
-    return '''ExchangeState { status: $status, selectedCurrency: $selectedCurrency, currencies: $currencies, converted: $converted }''';
+    return '''ExchangeState { status: $status, selectedCurrency: $selectedCurrency, currencies: $currencies, scanned: $scanned, converted: $converted }''';
   }
 
   @override
-  List<Object> get props => [status, selectedCurrency, currencies, converted];
+  List<Object> get props => [
+        status,
+        selectedCurrency,
+        currencies,
+        scanned,
+        converted,
+      ];
 }

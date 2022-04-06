@@ -35,11 +35,17 @@ class ExchangeBloc extends Bloc<ExchangeEvent, ExchangeState> {
     ExchangeFetched event,
     Emitter<ExchangeState> emit,
   ) async {
+    emit(state.copyWith(status: ExchangeStatus.initial));
     try {
       final currencies = await _exchangeRepository.fetchCurrencies();
+      final selectedCurrency = currencies[0];
+      final converted = state.scanned * selectedCurrency.rate;
+
       emit(state.copyWith(
         currencies: currencies,
-        selectedCurrency: currencies[0],
+        selectedCurrency: selectedCurrency,
+        status: ExchangeStatus.success,
+        converted: converted.toStringAsFixed(2),
       ));
     } catch (_) {
       emit(state.copyWith(status: ExchangeStatus.failure));
@@ -60,9 +66,17 @@ class ExchangeBloc extends Bloc<ExchangeEvent, ExchangeState> {
     try {
       final value = event.value;
       final rate = state.selectedCurrency.rate;
+      if (rate == double.nan) {
+        emit(state.copyWith(scanned: value));
+      }
+
       final converted = value * rate;
-      emit(state.copyWith(converted: converted.toStringAsFixed(2)));
+      emit(state.copyWith(
+        scanned: value,
+        converted: converted.toStringAsFixed(2),
+      ));
     } catch (_) {
+      // ignore: avoid_print
       print("TODO");
     }
   }

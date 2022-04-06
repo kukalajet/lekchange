@@ -15,5 +15,10 @@ class Currency {
   String toString() =>
       """{ name: $name, code: $code, symbol: $symbol, rate: $rate }""";
 
-  static const empty = Currency(name: '-', code: '-', symbol: '-', rate: 1.0);
+  static const empty = Currency(
+    name: '',
+    code: '',
+    symbol: '',
+    rate: double.nan,
+  );
 }
