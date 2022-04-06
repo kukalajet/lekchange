@@ -18,11 +18,11 @@ class ExchangeSelectedCurrencyChanged extends ExchangeEvent {
   List<Object> get props => [currency];
 }
 
-class ExchangeConvertedValueChanged extends ExchangeEvent {
-  const ExchangeConvertedValueChanged(this.value);
+class ExchangeConvertedAmountChanged extends ExchangeEvent {
+  const ExchangeConvertedAmountChanged(this.amount);
 
-  final double value;
+  final double amount;
 
   @override
-  List<Object> get props => [value];
+  List<Object> get props => [amount];
 }

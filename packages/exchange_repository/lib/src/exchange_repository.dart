@@ -13,6 +13,8 @@ class ExchangeRepository {
       Currency(name: 'Pound Sterling', code: "GBP", symbol: "£", rate: 0.0069),
     ];
 
+    await Future.delayed(Duration(seconds: 3));
+
     return currencies;
   }
 }

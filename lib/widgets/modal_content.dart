@@ -26,7 +26,7 @@ class ModalContent extends StatelessWidget {
               Header(
                 onDismiss: () {
                   Navigator.of(context).pop();
-                  context.read<ScanBloc>().add(const ScanValueDismissed());
+                  context.read<ScanBloc>().add(const ScanAmountDismissed());
                 },
               ),
               currenciesLoaded

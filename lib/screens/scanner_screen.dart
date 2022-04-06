@@ -12,10 +12,11 @@ class ScannerScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocConsumer<ScanBloc, ScanState>(
       listenWhen: (previous, current) =>
-          previous.status != current.status && previous.value != current.value,
+          previous.status != current.status &&
+          previous.amount != current.amount,
       listener: (context, state) {
-        final value = state.value;
-        if (!value.isNaN) {
+        final amount = state.amount;
+        if (!amount.isNaN) {
           showCupertinoModalBottomSheet(
             expand: false,
             context: context,
@@ -26,7 +27,8 @@ class ScannerScreen extends StatelessWidget {
         }
       },
       buildWhen: (previous, current) =>
-          previous.status != current.status && previous.value != current.value,
+          previous.status != current.status &&
+          previous.amount != current.amount,
       builder: (context, state) {
         final allowDuplicates = state.status == ScanStatus.initial;
 
@@ -36,7 +38,7 @@ class ScannerScreen extends StatelessWidget {
             onDetect: (barcode, arguments) {
               final code = barcode.rawValue;
               if (code != null) {
-                BlocProvider.of<ScanBloc>(context).add(ScanValueChanged(code));
+                BlocProvider.of<ScanBloc>(context).add(ScanAmountChanged(code));
               }
             },
           ),

@@ -5,24 +5,24 @@ enum ScanStatus { initial, valid, notValid }
 class ScanState extends Equatable {
   const ScanState({
     this.status = ScanStatus.initial,
-    this.value = double.nan,
+    this.amount = double.nan,
   });
 
-  final double value;
+  final double amount;
   final ScanStatus status;
 
-  ScanState copyWith({ScanStatus? status, double? value, Currency? currency}) {
+  ScanState copyWith({ScanStatus? status, double? amount, Currency? currency}) {
     return ScanState(
       status: status ?? this.status,
-      value: value ?? this.value,
+      amount: amount ?? this.amount,
     );
   }
 
   @override
   String toString() {
-    return '''ScanState { status: $status, value: $value }''';
+    return '''ScanState { status: $status, amount: $amount }''';
   }
 
   @override
-  List<Object> get props => [status, value];
+  List<Object> get props => [status, amount];
 }

@@ -10,29 +10,29 @@ class ScanBloc extends Bloc<ScanEvent, ScanState> {
   final priceRegExp = RegExp(r'prc=[0-9.]+');
 
   ScanBloc() : super(const ScanState()) {
-    on<ScanValueChanged>(_onScanValueChanged);
-    on<ScanValueDismissed>(_onScanValueDismissed);
+    on<ScanAmountChanged>(_onScanAmountChanged);
+    on<ScanAmountDismissed>(_onScanAmountDismissed);
   }
 
-  void _onScanValueChanged(ScanValueChanged event, Emitter<ScanState> emit) {
-    final scanned = event.value;
-    final isValid = priceRegExp.hasMatch(scanned);
+  void _onScanAmountChanged(ScanAmountChanged event, Emitter<ScanState> emit) {
+    final amount = event.amount;
+    final isValid = priceRegExp.hasMatch(amount);
     if (!isValid) {
       emit(state.copyWith(status: ScanStatus.notValid));
       return;
     }
 
-    final index = scanned.indexOf(pricePrefix);
-    final value = scanned.substring(index + 4);
-    final parsed = double.parse(value);
+    final index = amount.indexOf(pricePrefix);
+    final substringed = amount.substring(index + 4);
+    final parsed = double.parse(substringed);
 
-    emit(state.copyWith(status: ScanStatus.valid, value: parsed));
+    emit(state.copyWith(status: ScanStatus.valid, amount: parsed));
   }
 
-  void _onScanValueDismissed(
-    ScanValueDismissed event,
+  void _onScanAmountDismissed(
+    ScanAmountDismissed event,
     Emitter<ScanState> emit,
   ) {
-    emit(state.copyWith(status: ScanStatus.initial, value: double.nan));
+    emit(state.copyWith(status: ScanStatus.initial, amount: double.nan));
   }
 }
