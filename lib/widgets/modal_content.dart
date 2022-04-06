@@ -12,7 +12,8 @@ class ModalContent extends StatelessWidget {
     return BlocBuilder<ExchangeBloc, ExchangeState>(
       buildWhen: (previous, current) =>
           previous.converted != current.converted ||
-          previous.status != current.status,
+          previous.status != current.status ||
+          previous.selectedCurrency != current.selectedCurrency,
       builder: (context, state) {
         final value = state.converted;
         final currency = state.selectedCurrency.symbol;

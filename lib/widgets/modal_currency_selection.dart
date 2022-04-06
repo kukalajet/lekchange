@@ -44,6 +44,10 @@ class CurrencyListItem extends StatelessWidget {
         isThreeLine: true,
         subtitle: Text(currency.symbol),
         dense: true,
+        onTap: () {
+          context.read<ExchangeBloc>().add(ExchangeCurrencyChanged(currency));
+          Navigator.of(context).pop();
+        },
       ),
     );
   }

@@ -18,6 +18,7 @@ class ExchangeBloc extends Bloc<ExchangeEvent, ExchangeState> {
     on<ExchangeFetched>(_onExchangeFetched);
     on<ExchangeSelectedCurrencyChanged>(_onExchangeSelectedCurrencyChanged);
     on<ExchangeConvertedAmountChanged>(_onExchangeAmountChanged);
+    on<ExchangeCurrencyChanged>(_onExchangeCurrencyChanged);
 
     _scanSubscription = _scanBloc.stream.listen((event) {
       final amount = event.amount;
@@ -81,6 +82,18 @@ class ExchangeBloc extends Bloc<ExchangeEvent, ExchangeState> {
     } catch (_) {
       _emitExchangeDefaultState(emit);
     }
+  }
+
+  void _onExchangeCurrencyChanged(
+    ExchangeCurrencyChanged event,
+    Emitter<ExchangeState> emit,
+  ) {
+    final currency = event.currency;
+    final amount = state.amount;
+    final rate = currency.rate;
+    final converted = _convert(amount, rate).toStringAsFixed(2);
+
+    emit(state.copyWith(selectedCurrency: currency, converted: converted));
   }
 
   @override
