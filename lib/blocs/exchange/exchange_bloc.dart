@@ -70,7 +70,7 @@ class ExchangeBloc extends Bloc<ExchangeEvent, ExchangeState> {
     try {
       final amount = event.amount;
       final rate = state.selectedCurrency.rate;
-      if (rate == double.nan) {
+      if (rate.isNaN) {
         emit(state.copyWith(amount: amount));
       }
 
