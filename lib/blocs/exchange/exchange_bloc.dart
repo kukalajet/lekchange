@@ -20,8 +20,8 @@ class ExchangeBloc extends Bloc<ExchangeEvent, ExchangeState> {
     on<ExchangeConvertedAmountChanged>(_onExchangeAmountChanged);
     on<ExchangeCurrencyChanged>(_onExchangeCurrencyChanged);
 
-    _scanSubscription = _scanBloc.stream.listen((event) {
-      final amount = event.amount;
+    _scanSubscription = _scanBloc.stream.listen((state) {
+      final amount = state.amount;
       if (!amount.isNaN) {
         add(ExchangeConvertedAmountChanged(amount));
       }

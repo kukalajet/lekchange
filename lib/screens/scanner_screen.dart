@@ -38,7 +38,7 @@ class ScannerScreen extends StatelessWidget {
             onDetect: (barcode, arguments) {
               final code = barcode.rawValue;
               if (code != null) {
-                BlocProvider.of<ScanBloc>(context).add(ScanAmountChanged(code));
+                context.read<ScanBloc>().add(ScanAmountChanged(code));
               }
             },
           ),
