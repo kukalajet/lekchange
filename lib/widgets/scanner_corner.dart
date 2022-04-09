@@ -10,8 +10,8 @@ class ScannerCorner extends CustomClipper<Path> {
       size.height * 0.4553455,
       size.width * 0.0931818,
       size.height * 0.2714909,
-      size.width * 0.1818182,
-      size.height * 0.1818182,
+      size.width * 0.1909091,
+      size.height * 0.1909091,
     );
     path.cubicTo(
       size.width * 0.2721455,
@@ -38,8 +38,8 @@ class ScannerCorner extends CustomClipper<Path> {
       size.height * 0.1812000,
       size.width * 0.3367636,
       size.height * 0.1730545,
-      size.width * 0.2454545,
-      size.height * 0.2454545,
+      size.width * 0.2545455,
+      size.height * 0.2545455,
     );
     path.cubicTo(
       size.width * 0.1742727,
