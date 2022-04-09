@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:lekchange/widgets/scanner_corner.dart';
 
-class Scanner extends StatelessWidget {
-  const Scanner({Key? key}) : super(key: key);
+class ScannerIndicator extends StatelessWidget {
+  const ScannerIndicator({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

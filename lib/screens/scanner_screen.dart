@@ -44,7 +44,7 @@ class ScannerScreen extends StatelessWidget {
                   }
                 },
               ),
-              const Scanner(),
+              const ScannerIndicator(),
             ],
           ),
         );
