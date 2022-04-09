@@ -31,6 +31,7 @@ class ScannerScreen extends StatelessWidget {
           previous.amount != current.amount,
       builder: (context, state) {
         final allowDuplicates = state.status == ScanStatus.initial;
+        final isScannerIndicatorVisible = state.amount.isNaN;
 
         return Scaffold(
           body: Stack(
@@ -44,7 +45,7 @@ class ScannerScreen extends StatelessWidget {
                   }
                 },
               ),
-              const ScannerIndicator(),
+              ScannerIndicator(visible: isScannerIndicatorVisible),
             ],
           ),
         );

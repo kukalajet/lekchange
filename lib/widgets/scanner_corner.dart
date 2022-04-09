@@ -1,35 +1,66 @@
 import 'package:flutter/rendering.dart';
 
 class ScannerCorner extends CustomClipper<Path> {
-  var radius = 5.0;
   @override
   Path getClip(Size size) {
     Path path = Path();
-    path.moveTo(size.width * 0.1111111, size.height * 0.8333333);
-    path.lineTo(size.width * 0.1222222, size.height * 0.8777778);
-    path.lineTo(size.width * 0.1666667, size.height * 0.8888889);
-    path.lineTo(size.width * 0.2111111, size.height * 0.8777778);
-    path.lineTo(size.width * 0.2222222, size.height * 0.8111111);
-    path.lineTo(size.width * 0.2177778, size.height * 0.6888889);
-    path.lineTo(size.width * 0.2222222, size.height * 0.5333333);
-    path.lineTo(size.width * 0.2444444, size.height * 0.4222222);
-    path.lineTo(size.width * 0.3111111, size.height * 0.3111111);
-    path.lineTo(size.width * 0.4222222, size.height * 0.2444444);
-    path.lineTo(size.width * 0.5333333, size.height * 0.2222222);
-    path.lineTo(size.width * 0.6888889, size.height * 0.2177778);
-    path.lineTo(size.width * 0.8111111, size.height * 0.2222222);
-    path.lineTo(size.width * 0.8777778, size.height * 0.2111111);
-    path.lineTo(size.width * 0.8888889, size.height * 0.1666667);
-    path.lineTo(size.width * 0.8777778, size.height * 0.1222222);
-    path.lineTo(size.width * 0.8333333, size.height * 0.1111111);
-    path.lineTo(size.width * 0.6444444, size.height * 0.1111111);
-    path.lineTo(size.width * 0.4555556, size.height * 0.1222222);
-    path.lineTo(size.width * 0.3444444, size.height * 0.1555556);
-    path.lineTo(size.width * 0.2333333, size.height * 0.2333333);
-    path.lineTo(size.width * 0.1555556, size.height * 0.3444444);
-    path.lineTo(size.width * 0.1222222, size.height * 0.4555556);
-    path.lineTo(size.width * 0.1111111, size.height * 0.6444444);
-    path.lineTo(size.width * 0.1111111, size.height * 0.8333333);
+    path.moveTo(size.width * 0.0909091, size.height * 0.5454545);
+    path.cubicTo(
+      size.width * 0.0826545,
+      size.height * 0.4553455,
+      size.width * 0.0931818,
+      size.height * 0.2714909,
+      size.width * 0.1818182,
+      size.height * 0.1818182,
+    );
+    path.cubicTo(
+      size.width * 0.2721455,
+      size.height * 0.0916000,
+      size.width * 0.4544364,
+      size.height * 0.0824000,
+      size.width * 0.5454545,
+      size.height * 0.0909091,
+    );
+    path.quadraticBezierTo(
+      size.width * 0.5819091,
+      size.height * 0.0961091,
+      size.width * 0.5854545,
+      size.height * 0.1363636,
+    );
+    path.quadraticBezierTo(
+      size.width * 0.5821636,
+      size.height * 0.1732909,
+      size.width * 0.5454545,
+      size.height * 0.1818182,
+    );
+    path.cubicTo(
+      size.width * 0.4554364,
+      size.height * 0.1812000,
+      size.width * 0.3367636,
+      size.height * 0.1730545,
+      size.width * 0.2454545,
+      size.height * 0.2454545,
+    );
+    path.cubicTo(
+      size.width * 0.1742727,
+      size.height * 0.3366364,
+      size.width * 0.1829455,
+      size.height * 0.4553636,
+      size.width * 0.1818182,
+      size.height * 0.5454545,
+    );
+    path.quadraticBezierTo(
+      size.width * 0.1728727,
+      size.height * 0.5820000,
+      size.width * 0.1363636,
+      size.height * 0.5854545,
+    );
+    path.quadraticBezierTo(
+      size.width * 0.1003818,
+      size.height * 0.5836000,
+      size.width * 0.0909091,
+      size.height * 0.5454545,
+    );
     path.close();
 
     return path;
