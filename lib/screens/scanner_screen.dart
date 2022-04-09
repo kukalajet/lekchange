@@ -33,14 +33,19 @@ class ScannerScreen extends StatelessWidget {
         final allowDuplicates = state.status == ScanStatus.initial;
 
         return Scaffold(
-          body: MobileScanner(
-            allowDuplicates: allowDuplicates,
-            onDetect: (barcode, arguments) {
-              final code = barcode.rawValue;
-              if (code != null) {
-                context.read<ScanBloc>().add(ScanAmountChanged(code));
-              }
-            },
+          body: Stack(
+            children: [
+              MobileScanner(
+                allowDuplicates: allowDuplicates,
+                onDetect: (barcode, arguments) {
+                  final code = barcode.rawValue;
+                  if (code != null) {
+                    context.read<ScanBloc>().add(ScanAmountChanged(code));
+                  }
+                },
+              ),
+              const Scanner(),
+            ],
           ),
         );
       },
