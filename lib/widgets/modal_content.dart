@@ -2,10 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lekchange/blocs/blocs.dart';
 import 'package:lekchange/widgets/widgets.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class ModalContent extends StatelessWidget {
   const ModalContent({Key? key}) : super(key: key);
+
+  Widget _buildBody(
+    String value,
+    String currency,
+    bool loaded,
+  ) {
+    if (!loaded) return const CircularProgressIndicator();
+    return Column(
+      children: [
+        Value(value: value, currency: currency),
+        const CurrencyPicker(),
+      ],
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -17,25 +30,22 @@ class ModalContent extends StatelessWidget {
       builder: (context, state) {
         final value = state.converted;
         final currency = state.selectedCurrency.symbol;
-        final currenciesLoaded = state.status == ExchangeStatus.success;
+        final loaded = state.status == ExchangeStatus.success;
 
         return Material(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const SizedBox(height: 8.0),
-              Header(
-                onDismiss: () {
-                  Navigator.of(context).pop();
-                  context.read<ScanBloc>().add(const ScanAmountDismissed());
-                },
-              ),
-              currenciesLoaded
-                  ? Body(value: value, currency: currency)
-                  : const CircularProgressIndicator(),
-              const Footer(),
-              const SizedBox(height: 8.0),
-            ],
+          child: SafeArea(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Header(
+                  onDismiss: () {
+                    Navigator.of(context).pop();
+                    context.read<ScanBloc>().add(const ScanAmountDismissed());
+                  },
+                ),
+                _buildBody(value, currency, loaded),
+              ],
+            ),
           ),
         );
       },
@@ -50,64 +60,36 @@ class Header extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Container(),
-        ElevatedButton(
-          onPressed: onDismiss,
-          child: const Icon(
-            Icons.close_sharp,
-            color: Colors.black54,
-            size: 24,
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Container(),
+          ElevatedButton(
+            onPressed: onDismiss,
+            child: const Icon(
+              Icons.close_sharp,
+              color: Colors.black54,
+              size: 24,
+            ),
+            style: ElevatedButton.styleFrom(
+              primary: Colors.grey[300],
+              shape: const CircleBorder(),
+            ),
           ),
-          style: ElevatedButton.styleFrom(
-            primary: Colors.grey[300],
-            shape: const CircleBorder(),
-            padding: const EdgeInsets.all(8.0),
-          ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
 
-class Footer extends StatelessWidget {
-  const Footer({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Container(),
-        ElevatedButton(
-          onPressed: () {
-            showCupertinoModalBottomSheet(
-              expand: false,
-              context: context,
-              builder: (context) => ModalCurrencySelection(key: key),
-            );
-          },
-          child: const Icon(
-            Icons.language,
-            color: Colors.black54,
-            size: 24,
-          ),
-          style: ElevatedButton.styleFrom(
-            primary: Colors.grey[300],
-            shape: const CircleBorder(),
-            padding: const EdgeInsets.all(8.0),
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class Body extends StatelessWidget {
-  const Body({Key? key, required this.value, required this.currency})
-      : super(key: key);
+class Value extends StatelessWidget {
+  const Value({
+    Key? key,
+    required this.value,
+    required this.currency,
+  }) : super(key: key);
 
   final String value;
   final String currency;
@@ -115,7 +97,7 @@ class Body extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 48.0, horizontal: 16.0),
+      padding: const EdgeInsets.symmetric(vertical: 32.0, horizontal: 16.0),
       width: double.infinity,
       child: Text(
         "$value $currency",
@@ -123,7 +105,7 @@ class Body extends StatelessWidget {
         textAlign: TextAlign.center,
         style: const TextStyle(
           fontWeight: FontWeight.w700,
-          fontSize: 48,
+          fontSize: 56.0,
         ),
       ),
     );
