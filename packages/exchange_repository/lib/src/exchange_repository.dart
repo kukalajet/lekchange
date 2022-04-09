@@ -11,6 +11,7 @@ class ExchangeRepository {
       Currency(name: 'Euro', code: "EUR", symbol: "€", rate: 0.0081),
       Currency(name: 'U.S. Dollar', code: "USD", symbol: "\$", rate: 0.0091),
       Currency(name: 'Pound Sterling', code: "GBP", symbol: "£", rate: 0.0069),
+      Currency(name: 'Russian Ruble', code: "RUB", symbol: "₽", rate: 0.72),
     ];
 
     await Future.delayed(Duration(seconds: 3));
