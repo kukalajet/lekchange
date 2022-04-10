@@ -63,13 +63,8 @@ class Body extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<ExchangeBloc, ExchangeState>(
-      buildWhen: (previous, current) =>
-          previous.converted != current.converted ||
-          previous.selectedCurrency != current.selectedCurrency ||
-          previous.status != current.status,
+      buildWhen: (previous, current) => previous.status != current.status,
       builder: (context, state) {
-        final value = state.converted;
-        final currency = state.selectedCurrency.symbol;
         final ready = state.status == ExchangeStatus.success;
 
         if (!ready) {
@@ -89,8 +84,10 @@ class Body extends StatelessWidget {
           height: 192.0,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Amount(value: value, currency: currency),
+            children: const [
+              TopMessage(),
+              Amount(),
+              BottomMessage(),
             ],
           ),
         );
@@ -120,29 +117,85 @@ class Footer extends StatelessWidget {
 }
 
 class Amount extends StatelessWidget {
-  const Amount({
-    Key? key,
-    required this.value,
-    required this.currency,
-  }) : super(key: key);
-
-  final String value;
-  final String currency;
+  const Amount({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 32.0, horizontal: 16.0),
-      width: double.infinity,
-      child: Text(
-        "$value $currency",
-        maxLines: 3,
-        textAlign: TextAlign.center,
-        style: const TextStyle(
-          fontWeight: FontWeight.w700,
-          fontSize: 56.0,
-        ),
-      ),
+    return BlocBuilder<ExchangeBloc, ExchangeState>(
+      buildWhen: (previous, current) =>
+          previous.converted != current.converted ||
+          previous.selectedCurrency != current.selectedCurrency,
+      builder: (context, state) {
+        final value = state.converted;
+        final currency = state.selectedCurrency.symbol;
+
+        return Container(
+          padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 16.0),
+          child: Text(
+            "$value $currency",
+            maxLines: 1,
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+              fontWeight: FontWeight.w700,
+              fontSize: 56.0,
+            ),
+          ),
+        );
+      },
+    );
+  }
+}
+
+class BottomMessage extends StatelessWidget {
+  const BottomMessage({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<ExchangeBloc, ExchangeState>(
+      buildWhen: (previous, current) =>
+          previous.converted != current.converted ||
+          previous.selectedCurrency != current.selectedCurrency,
+      builder: (context, state) {
+        final amount = state.amount.toStringAsFixed(2);
+
+        return Text(
+          "$amount Lekë",
+          maxLines: 3,
+          textAlign: TextAlign.center,
+          style: const TextStyle(
+            color: Colors.black87,
+            fontWeight: FontWeight.w300,
+            fontSize: 18.0,
+          ),
+        );
+      },
+    );
+  }
+}
+
+class TopMessage extends StatelessWidget {
+  const TopMessage({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<ExchangeBloc, ExchangeState>(
+      buildWhen: (previous, current) =>
+          previous.selectedCurrency != current.selectedCurrency,
+      builder: (context, state) {
+        final isRuble = state.selectedCurrency.code == "RUB";
+
+        if (!isRuble) return Container();
+
+        return const Text(
+          "Слава Україні! 🇺🇦",
+          maxLines: 3,
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontWeight: FontWeight.w300,
+            fontSize: 16.0,
+          ),
+        );
+      },
     );
   }
 }

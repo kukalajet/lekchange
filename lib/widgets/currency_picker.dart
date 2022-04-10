@@ -16,7 +16,7 @@ class CurrencyPicker extends StatelessWidget {
         final selectedCurrency = state.selectedCurrency;
 
         return SizedBox(
-          height: 50.0,
+          height: 64.0,
           child: ListView.builder(
             padding: const EdgeInsets.all(8.0),
             scrollDirection: Axis.horizontal,
