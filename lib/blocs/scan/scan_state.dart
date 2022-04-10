@@ -1,6 +1,6 @@
 part of 'scan_bloc.dart';
 
-enum ScanStatus { initial, valid, notValid }
+enum ScanStatus { initial, scanned, valid, notValid }
 
 class ScanState extends Equatable {
   const ScanState({

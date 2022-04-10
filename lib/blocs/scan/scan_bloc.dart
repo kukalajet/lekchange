@@ -9,21 +9,31 @@ class ScanBloc extends Bloc<ScanEvent, ScanState> {
   final pricePrefix = 'prc=';
   final priceRegExp = RegExp(r'prc=[0-9.]+');
 
-  ScanBloc() : super(const ScanState()) {
+  ScanBloc({required ExchangeRepository exchangeRepository})
+      : _exchangeRepository = exchangeRepository,
+        super(const ScanState()) {
     on<ScanAmountChanged>(_onScanAmountChanged);
     on<ScanAmountDismissed>(_onScanAmountDismissed);
   }
 
-  void _onScanAmountChanged(ScanAmountChanged event, Emitter<ScanState> emit) {
-    final amount = event.amount;
-    final isValid = priceRegExp.hasMatch(amount);
+  final ExchangeRepository _exchangeRepository;
+
+  void _onScanAmountChanged(
+    ScanAmountChanged event,
+    Emitter<ScanState> emit,
+  ) async {
+    emit(state.copyWith(status: ScanStatus.scanned));
+    final value = event.value;
+    final url = await _exchangeRepository.retrieveScannedUrl(value);
+
+    final isValid = priceRegExp.hasMatch(url ?? value);
     if (!isValid) {
       emit(state.copyWith(status: ScanStatus.notValid));
       return;
     }
 
-    final index = amount.indexOf(pricePrefix);
-    final substringed = amount.substring(index + 4);
+    final index = (url ?? value).indexOf(pricePrefix);
+    final substringed = (url ?? value).substring(index + 4);
     final parsed = double.parse(substringed);
 
     emit(state.copyWith(status: ScanStatus.valid, amount: parsed));

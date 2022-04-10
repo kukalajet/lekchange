@@ -104,7 +104,7 @@ class ExchangeBloc extends Bloc<ExchangeEvent, ExchangeState> {
 
   void _emitExchangeDefaultState(Emitter<ExchangeState> emit) {
     emit(state.copyWith(
-      status: ExchangeStatus.failure,
+      status: ExchangeStatus.initial,
       amount: double.nan,
       converted: '',
     ));

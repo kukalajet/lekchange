@@ -8,12 +8,12 @@ abstract class ScanEvent extends Equatable {
 }
 
 class ScanAmountChanged extends ScanEvent {
-  const ScanAmountChanged(this.amount);
+  const ScanAmountChanged(this.value);
 
-  final String amount;
+  final String value;
 
   @override
-  List<Object> get props => [amount];
+  List<Object> get props => [value];
 }
 
 class ScanAmountDismissed extends ScanEvent {

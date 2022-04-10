@@ -18,4 +18,10 @@ class ExchangeRepository {
 
     return currencies;
   }
+
+  Future<String?> retrieveScannedUrl(String url) async {
+    final uri = Uri.parse(url);
+    final response = await http.get(uri);
+    return response.request?.url.toString();
+  }
 }
