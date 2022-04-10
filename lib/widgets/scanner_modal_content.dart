@@ -1,62 +1,35 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lekchange/blocs/blocs.dart';
-import 'package:lekchange/widgets/widgets.dart';
+import 'currency_picker.dart';
 
 class ScannerModalContent extends StatelessWidget {
   const ScannerModalContent({Key? key}) : super(key: key);
 
-  Widget _buildBody(
-    String value,
-    String currency,
-    bool loaded,
-  ) {
-    if (!loaded) return const CircularProgressIndicator();
-    return Column(
-      children: [
-        Value(value: value, currency: currency),
-        const CurrencyPicker(),
-      ],
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ExchangeBloc, ExchangeState>(
-      buildWhen: (previous, current) =>
-          previous.converted != current.converted ||
-          previous.status != current.status ||
-          previous.selectedCurrency != current.selectedCurrency,
-      builder: (context, state) {
-        final value = state.converted;
-        final currency = state.selectedCurrency.symbol;
-        final loaded = state.status == ExchangeStatus.success;
-
-        return Material(
-          child: SafeArea(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Header(
-                  onDismiss: () {
-                    Navigator.of(context).pop();
-                    context.read<ScanBloc>().add(const ScanAmountDismissed());
-                  },
-                ),
-                _buildBody(value, currency, loaded),
-              ],
-            ),
-          ),
-        );
-      },
+    return Material(
+      child: SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: const [
+            Header(),
+            Body(),
+            Footer(),
+          ],
+        ),
+      ),
     );
   }
 }
 
 class Header extends StatelessWidget {
-  const Header({Key? key, required this.onDismiss}) : super(key: key);
+  const Header({Key? key}) : super(key: key);
 
-  final Function() onDismiss;
+  void _onDismiss(BuildContext context) {
+    Navigator.of(context).pop();
+    context.read<ScanBloc>().add(const ScanAmountDismissed());
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -67,7 +40,7 @@ class Header extends StatelessWidget {
         children: [
           Container(),
           ElevatedButton(
-            onPressed: onDismiss,
+            onPressed: () => _onDismiss(context),
             child: const Icon(
               Icons.close_sharp,
               color: Colors.black54,
@@ -84,8 +57,70 @@ class Header extends StatelessWidget {
   }
 }
 
-class Value extends StatelessWidget {
-  const Value({
+class Body extends StatelessWidget {
+  const Body({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<ExchangeBloc, ExchangeState>(
+      buildWhen: (previous, current) =>
+          previous.converted != current.converted ||
+          previous.selectedCurrency != current.selectedCurrency ||
+          previous.status != current.status,
+      builder: (context, state) {
+        final value = state.converted;
+        final currency = state.selectedCurrency.symbol;
+        final ready = state.status == ExchangeStatus.success;
+
+        if (!ready) {
+          return const SizedBox(
+            height: 192.0,
+            child: SizedBox(
+              height: 40.0,
+              width: 40.0,
+              child: FittedBox(
+                child: CircularProgressIndicator(),
+              ),
+            ),
+          );
+        }
+
+        return SizedBox(
+          height: 192.0,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Amount(value: value, currency: currency),
+            ],
+          ),
+        );
+      },
+    );
+  }
+}
+
+class Footer extends StatelessWidget {
+  const Footer({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<ExchangeBloc, ExchangeState>(
+      buildWhen: (previous, current) => previous.status != current.status,
+      builder: (context, state) {
+        final ready = state.status == ExchangeStatus.success;
+
+        if (!ready) {
+          return const SizedBox(height: 64.0);
+        }
+
+        return const CurrencyPicker();
+      },
+    );
+  }
+}
+
+class Amount extends StatelessWidget {
+  const Amount({
     Key? key,
     required this.value,
     required this.currency,
