@@ -3,8 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lekchange/blocs/blocs.dart';
 import 'package:lekchange/widgets/widgets.dart';
 
-class ModalContent extends StatelessWidget {
-  const ModalContent({Key? key}) : super(key: key);
+class ScannerModalContent extends StatelessWidget {
+  const ScannerModalContent({Key? key}) : super(key: key);
 
   Widget _buildBody(
     String value,

@@ -22,7 +22,7 @@ class ScannerScreen extends StatelessWidget {
             context: context,
             isDismissible: false,
             enableDrag: false,
-            builder: (context) => ModalContent(key: key),
+            builder: (context) => ScannerModalContent(key: key),
           );
         }
       },
