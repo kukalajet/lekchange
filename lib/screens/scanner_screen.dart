@@ -10,10 +10,15 @@ class ScannerScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // context.read<ScanBloc>().add(ScanAmountChanged(
+    //       "https://efiskalizimi-app.tatime.gov.al/invoice-check/#/verify?iic=A98A8E0A1BBACFE4D6C37669513D1597&tin=L92103036T&crtd=2022-04-05T10:42:15%2B02:00&ord=27029&bu=kk994xz661&cr=jj171xk842&sw=pa302kj223&prc=360.0",
+    //     ));
+    // context.read<ScanBloc>().add(const ScanAmountChanged("test"));
+
     return BlocConsumer<ScanBloc, ScanState>(
       listenWhen: (previous, current) => previous.status != current.status,
       listener: (context, state) {
-        final isScanned = state.status == ScanStatus.scanned;
+        final isScanned = state.status == ScanStatus.loading;
         if (isScanned) {
           showCupertinoModalBottomSheet(
             expand: false,
@@ -25,17 +30,15 @@ class ScannerScreen extends StatelessWidget {
         }
       },
       buildWhen: (previous, current) =>
-          previous.status != current.status &&
-          previous.amount != current.amount,
+          previous.status != current.status && previous.value != current.value,
       builder: (context, state) {
-        final allowDuplicates = state.status == ScanStatus.initial;
-        final isScannerIndicatorVisible = state.amount.isNaN;
+        final isScanning = state.status == ScanStatus.initial;
 
         return Scaffold(
           body: Stack(
             children: [
               MobileScanner(
-                allowDuplicates: allowDuplicates,
+                allowDuplicates: isScanning,
                 onDetect: (barcode, arguments) {
                   final code = barcode.rawValue;
                   if (code != null) {
@@ -43,7 +46,7 @@ class ScannerScreen extends StatelessWidget {
                   }
                 },
               ),
-              ScannerIndicator(visible: isScannerIndicatorVisible),
+              ScannerIndicator(visible: isScanning),
             ],
           ),
         );

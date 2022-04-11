@@ -19,11 +19,19 @@ class ExchangeBloc extends Bloc<ExchangeEvent, ExchangeState> {
     on<ExchangeSelectedCurrencyChanged>(_onExchangeSelectedCurrencyChanged);
     on<ExchangeConvertedAmountChanged>(_onExchangeAmountChanged);
     on<ExchangeCurrencyChanged>(_onExchangeCurrencyChanged);
+    on<ExchangeStatusChanged>(_onExchangeStatusChanged);
+    on<ExchangeStateReset>(_emitExchangeStateReset);
 
     _scanSubscription = _scanBloc.stream.listen((state) {
-      final amount = state.amount;
-      if (!amount.isNaN) {
+      final amount = state.value;
+      final status = state.status;
+
+      if (status == ScanStatus.success && !amount.isNaN) {
         add(ExchangeConvertedAmountChanged(amount));
+      }
+      if (status == ScanStatus.failure) {
+        add(const ExchangeStateReset());
+        add(const ExchangeStatusChanged(status: ExchangeStatus.failure));
       }
     });
   }
@@ -42,6 +50,15 @@ class ExchangeBloc extends Bloc<ExchangeEvent, ExchangeState> {
 
       final amount = state.amount;
       final defaultCurrency = currencies[0];
+      if (amount.isNaN) {
+        emit(state.copyWith(
+          currencies: currencies,
+          selectedCurrency: defaultCurrency,
+          status: ExchangeStatus.success,
+        ));
+        return;
+      }
+
       final rate = defaultCurrency.rate;
       final converted = _convert(amount, rate).toStringAsFixed(2);
 
@@ -52,7 +69,7 @@ class ExchangeBloc extends Bloc<ExchangeEvent, ExchangeState> {
         converted: converted,
       ));
     } catch (_) {
-      _emitExchangeDefaultState(emit);
+      add(const ExchangeStateReset());
     }
   }
 
@@ -70,17 +87,20 @@ class ExchangeBloc extends Bloc<ExchangeEvent, ExchangeState> {
     try {
       final amount = event.amount;
       final rate = state.selectedCurrency.rate;
+
       if (rate.isNaN) {
         emit(state.copyWith(amount: amount));
+        return;
+      }
+
+      if (amount.isNaN) {
+        return;
       }
 
       final converted = _convert(amount, rate).toStringAsFixed(2);
-      emit(state.copyWith(
-        amount: amount,
-        converted: converted,
-      ));
+      emit(state.copyWith(amount: amount, converted: converted));
     } catch (_) {
-      _emitExchangeDefaultState(emit);
+      add(const ExchangeStateReset());
     }
   }
 
@@ -90,24 +110,47 @@ class ExchangeBloc extends Bloc<ExchangeEvent, ExchangeState> {
   ) {
     final currency = event.currency;
     final amount = state.amount;
+
+    if (amount.isNaN) {
+      emit(state.copyWith(selectedCurrency: currency));
+      return;
+    }
+
     final rate = currency.rate;
     final converted = _convert(amount, rate).toStringAsFixed(2);
 
     emit(state.copyWith(selectedCurrency: currency, converted: converted));
   }
 
-  @override
-  Future<void> close() {
-    _scanSubscription.cancel();
-    return super.close();
-  }
-
-  void _emitExchangeDefaultState(Emitter<ExchangeState> emit) {
+  void _emitExchangeStateReset(
+    ExchangeStateReset event,
+    Emitter<ExchangeState> emit,
+  ) {
     emit(state.copyWith(
       status: ExchangeStatus.initial,
       amount: double.nan,
       converted: '',
     ));
+  }
+
+  void _onExchangeStatusChanged(
+    ExchangeStatusChanged event,
+    Emitter<ExchangeState> emit,
+  ) {
+    final status = event.status;
+
+    if (status == ExchangeStatus.failure) {
+      emit(state.copyWith(status: status, converted: '🤷🏻'));
+      return;
+    }
+
+    emit(state.copyWith(status: status));
+  }
+
+  @override
+  Future<void> close() {
+    _scanSubscription.cancel();
+    return super.close();
   }
 
   double _convert(double amount, double rate) {

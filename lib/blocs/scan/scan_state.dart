@@ -1,28 +1,31 @@
 part of 'scan_bloc.dart';
 
-enum ScanStatus { initial, scanned, valid, notValid }
+enum ScanStatus { initial, loading, success, failure }
 
 class ScanState extends Equatable {
   const ScanState({
+    this.value = double.nan,
     this.status = ScanStatus.initial,
-    this.amount = double.nan,
   });
 
-  final double amount;
+  final double value;
   final ScanStatus status;
 
-  ScanState copyWith({ScanStatus? status, double? amount, Currency? currency}) {
+  ScanState copyWith({
+    double? value,
+    ScanStatus? status,
+  }) {
     return ScanState(
+      value: value ?? this.value,
       status: status ?? this.status,
-      amount: amount ?? this.amount,
     );
   }
 
   @override
   String toString() {
-    return '''ScanState { status: $status, amount: $amount }''';
+    return '''ScanState { amount: $value, status: $status }''';
   }
 
   @override
-  List<Object> get props => [status, amount];
+  List<Object> get props => [value, status];
 }

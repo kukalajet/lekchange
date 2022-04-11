@@ -22,27 +22,30 @@ class ScanBloc extends Bloc<ScanEvent, ScanState> {
     ScanAmountChanged event,
     Emitter<ScanState> emit,
   ) async {
-    emit(state.copyWith(status: ScanStatus.scanned));
+    emit(state.copyWith(status: ScanStatus.loading));
     final value = event.value;
-    final url = await _exchangeRepository.retrieveScannedUrl(value);
+    final fetched = await _exchangeRepository.fetchUrl(value);
 
-    final isValid = priceRegExp.hasMatch(url ?? value);
+    // `fetched` can be null, we fallback on `value`
+    final url = fetched ?? value;
+
+    final isValid = priceRegExp.hasMatch(url);
     if (!isValid) {
-      emit(state.copyWith(status: ScanStatus.notValid));
+      emit(state.copyWith(status: ScanStatus.failure, value: double.nan));
       return;
     }
 
-    final index = (url ?? value).indexOf(pricePrefix);
-    final substringed = (url ?? value).substring(index + 4);
+    final index = url.indexOf(pricePrefix);
+    final substringed = url.substring(index + 4);
     final parsed = double.parse(substringed);
 
-    emit(state.copyWith(status: ScanStatus.valid, amount: parsed));
+    emit(state.copyWith(status: ScanStatus.success, value: parsed));
   }
 
   void _onScanAmountDismissed(
     ScanAmountDismissed event,
     Emitter<ScanState> emit,
   ) {
-    emit(state.copyWith(status: ScanStatus.initial, amount: double.nan));
+    emit(state.copyWith(status: ScanStatus.initial, value: double.nan));
   }
 }

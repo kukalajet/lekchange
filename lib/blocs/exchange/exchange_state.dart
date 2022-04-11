@@ -1,7 +1,6 @@
 part of 'exchange_bloc.dart';
 
 enum ExchangeStatus { initial, success, failure }
-enum ConvertionStatus { initial, success, failure }
 
 class ExchangeState extends Equatable {
   const ExchangeState({

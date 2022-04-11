@@ -35,3 +35,19 @@ class ExchangeCurrencyChanged extends ExchangeEvent {
   @override
   List<Object> get props => [currency];
 }
+
+class ExchangeStatusChanged extends ExchangeEvent {
+  const ExchangeStatusChanged({required this.status});
+
+  final ExchangeStatus status;
+
+  @override
+  List<Object> get props => [];
+}
+
+class ExchangeStateReset extends ExchangeEvent {
+  const ExchangeStateReset();
+
+  @override
+  List<Object> get props => [];
+}

@@ -126,18 +126,22 @@ class Amount extends StatelessWidget {
           previous.converted != current.converted ||
           previous.selectedCurrency != current.selectedCurrency,
       builder: (context, state) {
-        final value = state.converted;
+        final status = state.status;
+        final converted = state.converted;
         final currency = state.selectedCurrency.symbol;
+        final value = status == ScanStatus.failure
+            ? "$converted $currency"
+            : state.converted;
 
         return Container(
           padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 16.0),
           child: Text(
-            "$value $currency",
+            value,
             maxLines: 1,
             textAlign: TextAlign.center,
             style: const TextStyle(
               fontWeight: FontWeight.w700,
-              fontSize: 56.0,
+              fontSize: 64.0,
             ),
           ),
         );

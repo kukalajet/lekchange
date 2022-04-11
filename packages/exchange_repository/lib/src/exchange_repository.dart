@@ -7,7 +7,7 @@ class ExchangeRepository {
   const ExchangeRepository({required this.httpClient});
 
   Future<List<Currency>> fetchCurrencies() async {
-    final currencies = <Currency>[
+    final currencies = const <Currency>[
       Currency(name: 'Euro', code: "EUR", symbol: "€", rate: 0.0081),
       Currency(name: 'U.S. Dollar', code: "USD", symbol: "\$", rate: 0.0091),
       Currency(name: 'Pound Sterling', code: "GBP", symbol: "£", rate: 0.0069),
@@ -19,9 +19,14 @@ class ExchangeRepository {
     return currencies;
   }
 
-  Future<String?> retrieveScannedUrl(String url) async {
-    final uri = Uri.parse(url);
-    final response = await http.get(uri);
-    return response.request?.url.toString();
+  Future<String?> fetchUrl(String url) async {
+    try {
+      final uri = Uri.parse(url);
+      final response = await http.get(uri);
+      final value = response.request?.url.toString();
+      return value;
+    } catch (_) {
+      return null;
+    }
   }
 }
