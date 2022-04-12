@@ -167,7 +167,7 @@ class BottomMessage extends StatelessWidget {
         final formattedAmount = '$scannedAmount Lekë';
         final value = isValid
             ? formattedAmount
-            : "Wrong QR code.\nAre you sure it is a valid receipt?";
+            : "Wrong QR code.\nAre you sure you are scanning a valid receipt?";
 
         return Container(
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
