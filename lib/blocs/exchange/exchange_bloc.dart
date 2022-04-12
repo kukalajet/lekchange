@@ -74,8 +74,6 @@ class ExchangeBloc extends Bloc<ExchangeEvent, ExchangeState> {
     emit(state.copyWith(
       exchangeStatus: ExchangeStatus.initial,
       scanStatus: ScanStatus.initial,
-      scannedAmount: double.nan,
-      convertedAmount: double.nan,
     ));
   }
 
