@@ -13,7 +13,7 @@ class ScannerScreen extends StatelessWidget {
     // context.read<ExchangeBloc>().add(const ExchangeValueScanned(
     //       "https://efiskalizimi-app.tatime.gov.al/invoice-check/#/verify?iic=A98A8E0A1BBACFE4D6C37669513D1597&tin=L92103036T&crtd=2022-04-05T10:42:15%2B02:00&ord=27029&bu=kk994xz661&cr=jj171xk842&sw=pa302kj223&prc=360.0",
     //     ));
-    context.read<ExchangeBloc>().add(const ExchangeValueScanned("test"));
+    // context.read<ExchangeBloc>().add(const ExchangeValueScanned("test"));
 
     return BlocConsumer<ExchangeBloc, ExchangeState>(
       listenWhen: (previous, current) =>

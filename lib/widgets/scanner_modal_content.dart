@@ -86,7 +86,6 @@ class Body extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: const [
-              TopMessage(),
               Amount(),
               BottomMessage(),
             ],
@@ -181,33 +180,6 @@ class BottomMessage extends StatelessWidget {
               fontWeight: FontWeight.w300,
               fontSize: 18.0,
             ),
-          ),
-        );
-      },
-    );
-  }
-}
-
-class TopMessage extends StatelessWidget {
-  const TopMessage({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<ExchangeBloc, ExchangeState>(
-      buildWhen: (previous, current) =>
-          previous.selectedCurrency != current.selectedCurrency,
-      builder: (context, state) {
-        final isRuble = state.selectedCurrency.code == "RUB";
-
-        if (!isRuble) return Container();
-
-        return const Text(
-          "Слава Україні! 🇺🇦",
-          maxLines: 3,
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            fontWeight: FontWeight.w300,
-            fontSize: 16.0,
           ),
         );
       },
