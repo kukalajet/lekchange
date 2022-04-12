@@ -66,9 +66,9 @@ class Body extends StatelessWidget {
       buildWhen: (previous, current) =>
           previous.exchangeStatus != current.exchangeStatus,
       builder: (context, state) {
-        final ready = state.exchangeStatus == ExchangeStatus.success;
+        final isLoading = state.exchangeStatus == ExchangeStatus.loading;
 
-        if (!ready) {
+        if (isLoading) {
           return const SizedBox(
             height: 192.0,
             child: SizedBox(
@@ -129,7 +129,7 @@ class Amount extends StatelessWidget {
           previous.selectedCurrency != current.selectedCurrency,
       builder: (context, state) {
         final exchangeStatus = state.exchangeStatus;
-        final convertedAmount = state.convertedAmount;
+        final convertedAmount = state.convertedAmount.toStringAsFixed(2);
         final selectedCurrencySymbol = state.selectedCurrency.symbol;
         final formatedAmount = '$convertedAmount $selectedCurrencySymbol';
 
@@ -163,16 +163,24 @@ class BottomMessage extends StatelessWidget {
           previous.scannedAmount != current.scannedAmount ||
           previous.selectedCurrency != current.selectedCurrency,
       builder: (context, state) {
-        final amount = state.scannedAmount.toStringAsFixed(2);
+        final isValid = state.exchangeStatus == ExchangeStatus.success;
+        final scannedAmount = state.scannedAmount.toStringAsFixed(2);
+        final formattedAmount = '$scannedAmount Lekë';
+        final value = isValid
+            ? formattedAmount
+            : "Wrong QR code.\nAre you sure it is a valid receipt?";
 
-        return Text(
-          "$amount Lekë",
-          maxLines: 3,
-          textAlign: TextAlign.center,
-          style: const TextStyle(
-            color: Colors.black87,
-            fontWeight: FontWeight.w300,
-            fontSize: 18.0,
+        return Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          child: Text(
+            value,
+            maxLines: 3,
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+              color: Colors.black87,
+              fontWeight: FontWeight.w300,
+              fontSize: 18.0,
+            ),
           ),
         );
       },

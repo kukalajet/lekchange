@@ -119,7 +119,14 @@ class ExchangeBloc extends Bloc<ExchangeEvent, ExchangeState> {
     Emitter<ExchangeState> emit,
   ) {
     final selectedCurrency = event.selectedCurrency;
-    emit(state.copyWith(selectedCurrency: selectedCurrency));
+    final rate = selectedCurrency.rate;
+    final scannedAmount = state.scannedAmount;
+    final convertedAmount = _convert(scannedAmount, rate);
+
+    emit(state.copyWith(
+      selectedCurrency: selectedCurrency,
+      convertedAmount: convertedAmount,
+    ));
   }
 
   double _convert(double amount, double rate) {
