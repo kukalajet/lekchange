@@ -70,7 +70,7 @@ class _CornerState extends State<Corner> with SingleTickerProviderStateMixin {
     );
     animation = Tween<double>(
       begin: 100,
-      end: 105,
+      end: 110,
     ).animate(controller)
       ..addListener(_addListener)
       ..addStatusListener(_addStatusListener);

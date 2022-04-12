@@ -7,46 +7,33 @@ abstract class ExchangeEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class ExchangeFetched extends ExchangeEvent {}
+class ExchangeValueScanned extends ExchangeEvent {
+  const ExchangeValueScanned(this.value);
 
-class ExchangeSelectedCurrencyChanged extends ExchangeEvent {
-  const ExchangeSelectedCurrencyChanged(this.currency);
-
-  final Currency currency;
+  final String value;
 
   @override
-  List<Object> get props => [currency];
+  List<Object> get props => [value];
 }
 
-class ExchangeConvertedAmountChanged extends ExchangeEvent {
-  const ExchangeConvertedAmountChanged(this.amount);
-
-  final double amount;
-
-  @override
-  List<Object> get props => [amount];
-}
-
-class ExchangeCurrencyChanged extends ExchangeEvent {
-  const ExchangeCurrencyChanged(this.currency);
-
-  final Currency currency;
-
-  @override
-  List<Object> get props => [currency];
-}
-
-class ExchangeStatusChanged extends ExchangeEvent {
-  const ExchangeStatusChanged({required this.status});
-
-  final ExchangeStatus status;
+class ExchangeScannedValueDismissed extends ExchangeEvent {
+  const ExchangeScannedValueDismissed();
 
   @override
   List<Object> get props => [];
 }
 
-class ExchangeStateReset extends ExchangeEvent {
-  const ExchangeStateReset();
+class ExchangeCurrenciesFetched extends ExchangeEvent {
+  const ExchangeCurrenciesFetched();
+
+  @override
+  List<Object> get props => [];
+}
+
+class ExchangeSelectedCurrencyChanged extends ExchangeEvent {
+  const ExchangeSelectedCurrencyChanged(this.selectedCurrency);
+
+  final Currency selectedCurrency;
 
   @override
   List<Object> get props => [];

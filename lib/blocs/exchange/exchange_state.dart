@@ -1,49 +1,55 @@
 part of 'exchange_bloc.dart';
 
-enum ExchangeStatus { initial, success, failure }
+enum ExchangeStatus { initial, loading, success, failure }
+enum ScanStatus { initial, loading, success, failure }
 
 class ExchangeState extends Equatable {
   const ExchangeState({
-    this.status = ExchangeStatus.initial,
+    this.exchangeStatus = ExchangeStatus.initial,
+    this.scanStatus = ScanStatus.initial,
+    this.scannedAmount = double.nan,
+    this.convertedAmount = double.nan,
     this.selectedCurrency = Currency.empty,
     this.currencies = const <Currency>[],
-    this.amount = double.nan,
-    this.converted = '',
   });
 
-  final ExchangeStatus status;
+  final ExchangeStatus exchangeStatus;
+  final ScanStatus scanStatus;
+  final double scannedAmount;
+  final double convertedAmount;
   final Currency selectedCurrency;
   final List<Currency> currencies;
-  final double amount;
-  final String converted;
 
   ExchangeState copyWith({
-    ExchangeStatus? status,
+    ExchangeStatus? exchangeStatus,
+    ScanStatus? scanStatus,
+    double? scannedAmount,
+    double? convertedAmount,
     Currency? selectedCurrency,
     List<Currency>? currencies,
-    double? amount,
-    String? converted,
   }) {
     return ExchangeState(
-      status: status ?? this.status,
+      exchangeStatus: exchangeStatus ?? this.exchangeStatus,
+      scanStatus: scanStatus ?? this.scanStatus,
+      scannedAmount: scannedAmount ?? this.scannedAmount,
+      convertedAmount: convertedAmount ?? this.convertedAmount,
       selectedCurrency: selectedCurrency ?? this.selectedCurrency,
       currencies: currencies ?? this.currencies,
-      amount: amount ?? this.amount,
-      converted: converted ?? this.converted,
     );
   }
 
   @override
   String toString() {
-    return '''ExchangeState { status: $status, selectedCurrency: $selectedCurrency, currencies: $currencies, amount: $amount, converted: $converted }''';
+    return '''ExchangeState { exchangeStatus: $exchangeStatus, scanStatus: $scanStatus, scannedAmount: $scannedAmount, convertedAmount: $convertedAmount, selectedCurrency: $selectedCurrency, currencies: $currencies }''';
   }
 
   @override
   List<Object> get props => [
-        status,
+        exchangeStatus,
+        scanStatus,
+        scannedAmount,
+        convertedAmount,
         selectedCurrency,
-        currencies,
-        amount,
-        converted,
+        currencies
       ];
 }

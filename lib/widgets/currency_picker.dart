@@ -34,9 +34,8 @@ class CurrencyPicker extends StatelessWidget {
                   selected: isSelected,
                   selectedColor: Colors.blue,
                   onSelected: (bool _) {
-                    context
-                        .read<ExchangeBloc>()
-                        .add(ExchangeCurrencyChanged(currencies[index]));
+                    context.read<ExchangeBloc>().add(
+                        ExchangeSelectedCurrencyChanged(currencies[index]));
                   },
                 ),
               );

@@ -28,7 +28,7 @@ class Header extends StatelessWidget {
 
   void _onDismiss(BuildContext context) {
     Navigator.of(context).pop();
-    context.read<ScanBloc>().add(const ScanAmountDismissed());
+    context.read<ExchangeBloc>().add(const ExchangeScannedValueDismissed());
   }
 
   @override
@@ -63,9 +63,10 @@ class Body extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<ExchangeBloc, ExchangeState>(
-      buildWhen: (previous, current) => previous.status != current.status,
+      buildWhen: (previous, current) =>
+          previous.exchangeStatus != current.exchangeStatus,
       builder: (context, state) {
-        final ready = state.status == ExchangeStatus.success;
+        final ready = state.exchangeStatus == ExchangeStatus.success;
 
         if (!ready) {
           return const SizedBox(
@@ -102,9 +103,10 @@ class Footer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<ExchangeBloc, ExchangeState>(
-      buildWhen: (previous, current) => previous.status != current.status,
+      buildWhen: (previous, current) =>
+          previous.exchangeStatus != current.exchangeStatus,
       builder: (context, state) {
-        final ready = state.status == ExchangeStatus.success;
+        final ready = state.exchangeStatus == ExchangeStatus.success;
 
         if (!ready) {
           return const SizedBox(height: 64.0);
@@ -123,15 +125,16 @@ class Amount extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<ExchangeBloc, ExchangeState>(
       buildWhen: (previous, current) =>
-          previous.converted != current.converted ||
+          previous.convertedAmount != current.convertedAmount ||
           previous.selectedCurrency != current.selectedCurrency,
       builder: (context, state) {
-        final status = state.status;
-        final converted = state.converted;
-        final currency = state.selectedCurrency.symbol;
-        final value = status == ScanStatus.failure
-            ? "$converted $currency"
-            : state.converted;
+        final exchangeStatus = state.exchangeStatus;
+        final convertedAmount = state.convertedAmount;
+        final selectedCurrencySymbol = state.selectedCurrency.symbol;
+        final formatedAmount = '$convertedAmount $selectedCurrencySymbol';
+
+        final value =
+            exchangeStatus != ExchangeStatus.failure ? formatedAmount : "🤷🏻";
 
         return Container(
           padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 16.0),
@@ -157,10 +160,10 @@ class BottomMessage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<ExchangeBloc, ExchangeState>(
       buildWhen: (previous, current) =>
-          previous.converted != current.converted ||
+          previous.scannedAmount != current.scannedAmount ||
           previous.selectedCurrency != current.selectedCurrency,
       builder: (context, state) {
-        final amount = state.amount.toStringAsFixed(2);
+        final amount = state.scannedAmount.toStringAsFixed(2);
 
         return Text(
           "$amount Lekë",
