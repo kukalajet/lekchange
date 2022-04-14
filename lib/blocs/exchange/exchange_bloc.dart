@@ -31,10 +31,10 @@ class ExchangeBloc extends Bloc<ExchangeEvent, ExchangeState> {
 
     try {
       final value = event.value;
-      final fetched = await _exchangeRepository.fetchUrl(value);
+      final redirect = await _exchangeRepository.getRedirectUrl(value);
 
-      // `fetched` can be null, we fallback on `value`
-      final url = fetched ?? value;
+      // `redirect` can be null, we fallback on `value`
+      final url = redirect ?? value;
 
       final isValid = _priceRegExp.hasMatch(url);
       if (!isValid) {

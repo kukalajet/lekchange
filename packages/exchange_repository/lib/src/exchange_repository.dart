@@ -19,13 +19,15 @@ class ExchangeRepository {
     return currencies;
   }
 
-  Future<String?> fetchUrl(String url) async {
+  Future<String?> getRedirectUrl(String url) async {
     try {
-      final uri = Uri.parse(url);
-      final response = await http.get(uri);
-      final value = response.request?.url.toString();
-      return value;
-    } catch (_) {
+      final request = http.Request('GET', Uri.parse(url))
+        ..followRedirects = false;
+      final response = await httpClient.send(request);
+      final redirect = response.headers['location'];
+
+      return redirect;
+    } on Exception {
       return null;
     }
   }
