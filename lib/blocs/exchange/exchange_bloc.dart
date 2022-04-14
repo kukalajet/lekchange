@@ -24,6 +24,13 @@ class ExchangeBloc extends Bloc<ExchangeEvent, ExchangeState> {
     ExchangeValueScanned event,
     Emitter<ExchangeState> emit,
   ) async {
+    // `ExchangeValueScanned` can get triggered many times during a scan.
+    // If it has been already started, we skip it.
+    final currentScanStatus = state.scanStatus;
+    if (currentScanStatus != ScanStatus.initial) {
+      return;
+    }
+
     emit(state.copyWith(
       scanStatus: ScanStatus.loading,
       exchangeStatus: ExchangeStatus.loading,
