@@ -15,6 +15,22 @@ class Currency {
   String toString() =>
       """{ name: $name, code: $code, symbol: $symbol, rate: $rate }""";
 
+  factory Currency.fromJson(Map<String, dynamic> json) {
+    return Currency(
+      name: json['name'] as String,
+      code: json['code'] as String,
+      symbol: json['symbol'] as String,
+      rate: json['rate'] as double,
+    );
+  }
+
+  Map<String, dynamic> toJson() => {
+        'name': name,
+        'code': code,
+        'symbol': symbol,
+        'rate': rate,
+      };
+
   static const empty = Currency(
     name: '',
     code: '',

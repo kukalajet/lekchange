@@ -7,6 +7,7 @@ import 'package:lekchange/app.dart';
 
 void main() {
   final httpClient = http.Client();
+
   final exchangeRepository = ExchangeRepository(httpClient: httpClient);
 
   BlocOverrides.runZoned(
